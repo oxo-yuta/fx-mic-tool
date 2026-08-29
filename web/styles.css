@@ -311,6 +311,19 @@ select, input[type=text], input[type=number] {
 .masthead__right { display: flex; align-items: center; gap: 7px; margin-left: auto; }
 .masthead__right select { padding: 5px 6px; }
 
+/* アイコンだけのリンク。ボタンと同じ硬いエッジと影で揃える。 */
+.icon-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  /* 高さは隣の言語セレクタに合わせる（セレクタの高さはフォント環境で変わるため固定値にしない） */
+  align-self: stretch; width: 28px;
+  border: 1px solid var(--ink);
+  background: var(--panel-3);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+.icon-link:hover { background: var(--white); }
+.icon-link:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--shadow); }
+
 /* タイトルバー内の小ボタン */
 .bar-btn {
   box-shadow: none;
