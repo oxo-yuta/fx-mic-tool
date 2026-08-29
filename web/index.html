@@ -48,21 +48,20 @@
 
         <div class="device-wrap" id="deviceWrap">
         <svg class="device" id="device" viewBox="-28 10 272 308" role="img" aria-label="fx-mic">
+          <!-- ハンドル。本体より先に描いて背面に置くので、本体の左からはみ出た部分だけが見える。
+               回転軸は板の下端の一点（44,228）で、本体の中にある。
+               押し込み 100% で左辺が本体の左辺とほぼ平行になり、開放 0% で 16 度外に開く。
+               右辺は垂直から 22 度傾けてあるので、開いても本体との間に隙間ができない。 -->
+          <g id="handleGroup" class="hit">
+            <path id="handle"
+                  d="M44 228 L18 62 L117 47 Z"
+                  fill="#e05526" stroke="#000005" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="32" cy="122" r="4" fill="#000005" opacity=".5"/>
+          </g>
           <!-- 本体 -->
           <rect x="44" y="18" width="180" height="292" fill="#e7e7e5" stroke="#000005" stroke-width="2"/>
           <rect x="44" y="18" width="180" height="163" fill="#2f2f2f" stroke="#000005" stroke-width="2"/>
           <g id="grille" fill="#4a4a4a"></g>
-
-          <!-- ハンドル。TE の図と同じく本体より前面に描く（押し込むと本体に重なるため、
-               背面だと見えなくなる）。回転軸は下端の一点（44,228）で、本体の中にある。
-               形は開いた扇子の左端の板。押し込むと左辺が本体の左辺とほぼ平行になり、
-               開放時はそこから約 16 度外に開く（TE のイラストの可動域に合わせた）。 -->
-          <g id="handleGroup" class="hit">
-            <path id="handle"
-                  d="M44 228 L24 62 Q37 40 56 24 Z"
-                  fill="#e05526" stroke="#000005" stroke-width="2" stroke-linejoin="round"/>
-            <circle cx="33" cy="120" r="4" fill="#000005" opacity=".5"/>
-          </g>
 
           <!-- 右エッジのボタン -->
           <g id="btnFx" class="hit">
