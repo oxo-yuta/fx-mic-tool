@@ -1,0 +1,50 @@
+{
+  "name": "TEMPLATE PACK",
+  "presets": [
+    {
+      "pos": 0,
+      "name": "SLOT 1",
+      "comment": "handle opens the lowpass filter.",
+      "list": [
+        { "effect": "LOWPASS", "cutoff": 0.3 },
+        { "effect": "SAMPLE" }
+      ],
+      "handle": { "row": 0, "param": "cutoff", "depth": 0.7 },
+      "trigger": { "row": 1 }
+    },
+    {
+      "pos": 1,
+      "name": "SLOT 2",
+      "comment": "handle pushes the delay into feedback.",
+      "list": [
+        { "effect": "DELAY", "time": 0.4, "echo": 0.3, "wet-level": 0.5 },
+        { "effect": "SAMPLE" }
+      ],
+      "handle": { "row": 0, "param": "echo", "depth": 0.5 },
+      "trigger": { "row": 1 }
+    },
+    {
+      "pos": 2,
+      "name": "SLOT 3",
+      "comment": "handle acts as a pitch wheel.",
+      "list": [
+        { "effect": "HARMONY", "pitch": 1.0, "dry-level": 0.3 },
+        { "effect": "SAMPLE" }
+      ],
+      "handle": { "row": 0, "param": "pitch", "depth": 1.0 },
+      "trigger": { "row": 1 }
+    },
+    {
+      "pos": 3,
+      "name": "SLOT 4",
+      "comment": "reverb wash, shake to splash.",
+      "list": [
+        { "effect": "REVERB", "time": 0.4, "wet-level": 0.3, "dry-level": 1.0 },
+        { "effect": "SAMPLE" }
+      ],
+      "handle": { "row": 0, "param": "time", "depth": 0.6 },
+      "shake": { "row": 0, "param": "wet-level", "depth": 0.7 },
+      "trigger": { "row": 1 }
+    }
+  ]
+}

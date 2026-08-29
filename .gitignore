@@ -1,0 +1,8 @@
+# TE 公式パック（teenage engineering の著作物。再配布禁止のためコミットしない）
+# 取得方法: docs/reference-packs.md 参照
+/vendor/
+
+# 作業用の一時ファイル
+/build/
+*.tmp
+.DS_Store

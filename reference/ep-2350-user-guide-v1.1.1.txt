@@ -1,0 +1,407 @@
+ EP–2350 fx mic - teenage engineering 
+ checkout menu 
+ EP–2350 
+ FX
+microphone 
+ user
+guide 
+ ver 1.1.1
+ fx-mic is a standalone handheld performance microphone with built in fx, 4 on-board samples and a parameter modulation lever. it's not hi-fi, but it’s definitely not boring! hook it up to your sound system or straight into k.o.ii. 
+ fx-mic features 1 mb of sample storage, more than any other microphone. use it to store your own sounds, then trigger them with the dedicated sample trigger button. 
+ notice. read this first. 
+ battery information:
+ install only new batteries of the same type.
+ make sure to only insert batteries in the correct polarity, as indicated in the battery compartment.
+ do not mix old and new batteries.
+ do not mix alkaline, standard (carbon-zink) or rechargeable (nickel cadmium) or (nickel metal hybride) batteries.
+ do not dispose of batteries in fire.
+ batteries should be recycled or disposed of as per state and local guidelines.
+fcc statement:
+note: this equipment has been tested and found to comply with the limits for a class b digital device,
+pursuant to part 15 of the fcc rules. these limits are designed to provide reasonable protection against harmful interference in a residential installation. this equipment generates, uses and can radiate radio frequency energy and, if not installed and used in accordance with the instructions, may cause harmful interference to radio communications. however, there is no guarantee that interference will not occur in a particular installation.; 
+ if this equipment does cause harmful interference to radio or television reception, which can be determined by turning the equipment off and on, the user is encouraged to try to correct the interference by one or more of the following measures;
+ reorient or relocate the receiving antenna
+ increase the separation between the equipment and receiver
+ connect the equipment into an outlet on a circuit different from that to which the receiver is connected.
+ consult the dealer or an experienced radio/tv technician for help.
+this device complies with part 15 of the fcc rules.
+operation is subject to the following conditions;
+ this device may not cause harmful interference, and
+ this device must accept any interference received, including interference that may cause undesired operation.
+caution: changes or modifications not expressly approved by the party responsible for compliance could void user’s authority to operate the equipment.
+ices statement
+can ices-003 (b) / nmb-3 (b)
+ teenage engineering warrants that this product will be free from defects in material or workmanship for a period of 12 months from the date of teenage engineering’s shipment of the product to you, the customer. in the event of a defect covered by this limited warranty, teenage engineering will, at its option and free of charge to customer, repair, replace or refund the purchase price paid.
+TEENAGE ENGINEERING MAKES NO OTHER EXPRESS WARRANTIES EXCEPT AS PROVIDED HEREIN, AND ANY AND ALL IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR PARTICULAR PURPOSE SHALL ONLY BE IN EFFECT DURING THE 12 MONTH WARRANTY PERIOD PROVIDED HEREUNDER. TEENAGE ENGINEERING'S LIABILITY ON ANY WARRANTY CLAIM SHALL BE LIMITED TO THE ACTUAL PURCHASE PRICE PAID. TEENAGE ENGINEERING SHALL NOT BE RESPONSIBLE TO CUSTOMER OR ANY THIRD PARTY FOR ANY CONSEQUENTIAL, INCIDENTAL OR INDIRECT DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, LOSS OF DATA, REVENUES, SALES, BUSINESS, GOODWILL OR USE. 
+ what does this limited warranty not cover?
+teenage engineering has no obligation to repair, replace, or provide refunds in the following instances:
+ if the alleged defect arises because customer has altered or repaired the product without the prior written consent or authorization of teenage engineering;
+ Tactile feedback may vary between keys and is not considered a defect of the unit.
+ if customer did not follow any applicable instructions for proper storage, usage, or maintenance of this product;
+ if customer has failed to notify teenage engineering of any defect where the defect should have been reasonably apparent on inspection; or
+ if customer fails to notify teenage engineering of the defect within 12 months of teenage engineering's shipment of this product to customer. this limited warranty does not cover the cost of shipping the defective product to teenage engineering for repair, or the cost of shipping the repaired or replacement product to you. how do customers receive warranty service? please call your teenage engineering customer service representative for details on how to raise an issue in relation to your product.
+ intellectual property rights 
+ this product contains intellectual property right material (the “material") owned by teenage engineering. 
+ protected material
+the material within this product includes, but is not limited to, samples, sound files, style data, accompaniment patterns, phrase data, audio loops, and image data.
+permitted usage
+you are permitted to use the material in the creation, performance, recording, and distribution of your own original creation.
+prohibited usage
+you are prohibited from redistributing, reselling, leasing, sharing, reproducing, or publicly displaying the material in its original or modified form, including through online platforms, public performances, broadcasts, or as part of derivative works, unless it is substantially transformed into an original creation.
+ respect for third-party copyrights
+you are responsible for ensuring that your use of the product does not infringe on any third-party copyrights. teenage engineering assumes no liability for any copyright infringements that result from the use of this product.
+protected trademarks
+teenage engineering holds all rights to its registered trademarks. 
+ ((2)) 
+ power on 
+ remove the two front covers and insert 2 x AAA batteries. 
+ you can also power fx-mic with a usb-c cable. 
+ pressing the handle will power fx-mic on. it will light up to let you know it is on. 
+ 2.1 
+ battery 
+ when powered over usb-c EP–2350 fx-mic will stay powered until you pull the cable. 
+ the batteries will not be used if powered over usb. 
+ the batteries will not be charged over usb-c. 
+ 5 minutes after releasing the handle EP–2350 will go into power saving mode. 
+ 20 minutes after releasing the handle EP–2350 will turn off. 
+ if the battery voltage is too low or if they run out an LED will blink and EP–2350 will not turn on. 
+ remove the batteries when storing EP–2350. 
+ ((3)) 
+ connecting fx-mic 
+ loud sound levels leads to hearing loss.  
+ FX-MIC is designed to connect
+to koii or an audio mixer, not directly to headphones. 
+ the maximum output is 2 VRMS. this can be very loud when connected directly to
+headphones. 
+ under the lid there is a round orange potentiometer. turn it to adjust the volume. 
+ ((4)) 
+ adding fx and samples 
+ the position of the handle can be used to change the amount of an effect. 
+ shaking EP–2350 fx-mic can temporarily modify the sound of an effect, this is preset dependent. 
+ the orange button selects between no effect and the 4 effect preset slots.  
+ the built-in effect presets are: ECHO, SPRING, PIXIE, ROBOT 
+ the white button selects between the 4 sample slots. 
+ the built-in samples are: horn, applause, ringside bell, censor beep (temporarily mutes fx-mic, for foul language emergencies) 
+ the grey button plays the selected sample. 
+ ((5)) 
+ updating the firmware 
+ you will need a firmware file. new firmware files are available on the downloads page here . 
+ remove the lower lid and attach a usb-c cable to your computer. 
+ hold the handle and double click the small button above the usb port. 
+ a disk called ‘FX-MIC BOOT’ will appear on your computer with the files INDEX.HTM and INFO_UF2.TXT, drag and drop the firmware file to this disk
+and wait until transferred and EP–2350 fx-mic restarts. do not release the handle until the update has been completed and EP–2350 restarts. 
+ ((6)) 
+ changing the samples and fx 
+ remove the lower lid and attach a usb-c cable between fx-mic and your computer. make sure fx-mic is powered on by pushing the handle. 
+ a disk called ‘fx-mic disk’ will appear on your computer.  
+ here you may place your samples, named 1.wav, 2.wav, 3.wav and 4.wav as well as a config.json file.
+only wav samples are allowed and The samples can be mono or stereo, 8/16/24-bit or 32-bit floating point, with a frequency up to 96 kHz. total storage is 1 mb 
+ eject ‘fx-mic disk’ on your computer. fx-mic will then restart and load the new sounds.
+for more advanced sample features go to chapter 7.4. 
+ ((7)) 
+ customising fx-mic 
+ the heart of your device is a file named config.json. by editing this file, you can completely redesign how the unit sounds, how the effects behave, and how you interact with the audio using the handle, motion, and automation. 
+ 7.1 
+ installing a new config file 
+ remove the lower lid and attach a usb-c cable between fx-mic and your computer. make sure fx-mic is powered on by pushing the handle. 
+ a disk called ‘fx-mic disk’ will appear on your computer.  
+ place a config.json file into the root folder. 
+ eject ‘fx-mic disk’ on your computer. fx-mic will then restart and load the config file. 
+ 7.2 
+ the golden rules 
+ json is a strict text format. if you break the syntax, the unit will not start. 
+ quotes are mandatory, every text element must be inside double quotes. 
+ watch your commas, every line in a list must end with a comma, except the last one. this is the #1 cause of errors. 
+ mind case sensitivity, always use uppercase for effect names. 
+ messed up? if you happen to break the json file for some reason and the device freezes, don’t panic. simply connect to a computer and hold the white + grey  buttons during startup to access and fix the file.
+ 7.3 
+ file anatomy 
+ the file is divided into three main sections inside the root brackets { }: 
+ 1. name: the name of your pack. 
+ 2. samples: the list of audio files (or omit this to use internal sounds). 
+ 3. presets: the effects chains. 
+ basic skeleton: 
+ .json 
+ {
+ "name": "MY PACK NAME", 
+ "samples": [ ... ],
+ "presets": [ ... ]
+} 
+ 7.4 
+ samples 
+ requirements: format: wav only. mono or stereo.
+ bit depth: 8/16/24-bit or 32-bit float.
+ max frequency: 96 khz.
+ total size limit: approx. 1 mb.
+ playmodes: "oneshot": plays the full file once when triggered.
+ "hold": plays only while the button is held down.
+ "startstop": press to start loop, press again to stop.
+ syntax: 
+ .json 
+ { "file": "drum.wav", "playmode": "oneshot" } 
+ 7.5 
+ using the built in samples 
+ if you want to use the 4 factory built-in sounds instead of your own wav files, follow these rules: 
+ 1. remove the samples section: delete the entire 
+"samples": [ ... ] 
+block from your json file. 
+ 2. include the sample block: you must still include  { "effect": "SAMPLE" } inside your preset chain (see section 4), otherwise no sound will be generated. 
+ 3. signal flow and fx: the position of the sample block in the list matters. 
+ 4. to apply fx: place the sample block before the effects you want to affect the sample.
+to keep it dry (no fx): place the sample block at the very end of the list. 
+ 7.6 
+ presets and effects 
+ the presets list defines the 4 slots (orange button). each preset contains a chain of effects (list) and modulation rules.
+effects are processed based on their order in the list. 
+ syntax: 
+ .json 
+ "list": [  
+  { "effect": "DIST", "amount": 10.0 },  
+  { "effect": "REVERB", "time": 0.5 },
+  { "effect": "SAMPLE" } 
+] 
+ you can place fx on different slots on fx-mic with pos; the preset slot number (0, 1, 2, 3).
+in this example the first file will play on the the first sample slot ‘0’ and the second fill be placed on the last sample slot ‘3’. 
+ .json 
+ "samples": [
+     { "file": "A.wav","playmode": "oneshot" },
+     { "pos": 3, "file": "D.wav","playmode": "oneshot" }
+   ] 
+ optionally we suggest you add the following fields:
+ name: (optional) a human-readable name for your preset.
+ comment: (optional) notes on how the preset works.
+ 7.7 
+ list of effects 
+ parameters 
+ range min 
+ range max 
+ balance 
+ 0.0 
+ 1.0 
+ delay (standard echo) * 
+ time (decay) 
+ 0.0 
+ 1.1 
+ lowpass-cutoff 
+ 0.0 
+ 1.0 
+ highpass-cutoff 
+ 0.0 
+ 1.0 
+ wet-level 
+ 0.0 
+ 1.0 
+ dry-level 
+ 0.0 
+ 1.0 
+ echo (feedback) 
+ 0.0 
+ 1.0 
+ cross-feed (mixes left/right echoes) 
+ 0.0 
+ 1.0 
+ balance 
+ 0.0 
+ 1.0 
+ dist (distortion/overdrive) 
+ amount 
+ 0.0 
+ 40.0 
+ lowpass-cutoff 
+ 0.0 
+ 1.0 
+ highpass-cutoff 
+ 0.0 
+ 1.0 
+ mix 
+ 0.0 
+ 1.0 
+ EQUALISER 
+ CUTOFF 
+ 0.0 
+ 1.0 
+ Q 
+ 0.0 
+ 1.0 
+ GAIN 
+ -1.0 
+ 1.0 
+ harmony* 
+ dry-level 
+ 0.0 
+ 1.0 
+ pitch 
+ 0.5 
+ 2.0 
+ lowpass 
+ cutoff 
+ 0.0 
+ 1.0 
+ highpass 
+ cutoff 
+ 0.0 
+ 1.0 
+ sample 
+ speed 
+ 0.0 
+ 4.0 
+ pitch 
+ -24.0 
+ 24.0 
+ level 
+ 0.0 
+ 1.0 
+ balance 
+ 0.0 
+ 1.0 
+ reverb (room simulation) * 
+ dry-level 
+ 0.0 
+ 1.0 
+ wet-level 
+ 0.0 
+ 1.0 
+ time  
+ 0.0 
+ 1.0 
+ spring-mix (adds metallic boing sound) 
+ 0.0 
+ 1.0 
+ highpass-cutoff 
+ 0.0 
+ 1.0 
+ ring (ring modulation) 
+ frequency 
+ 0.0 
+ 20000.0 
+ mix  
+ 0.0 
+ 1.0 
+ ssb (single sideband) * 
+ frequency  
+ -20000.0 
+ 20000.0 
+ *use once per effect chain 
+ 7.8 
+ modulation 
+ you can control parameters live using the handle, shaking fx-mic, or an with an lfo (low frequency oscillator). modulation blocks (handle, shake, lfo) are placed after the effect list. 
+ to target a parameter you must tell the unit which row in your effect list to change.
+ row : the index of the effect (starts at 0).
+ param : the exact parameter name (e.g., "time", "cutoff").
+ depth : how much to change the value.
+the handle can control an effect based on it’s position (0% to 100%).
+ values can be either:
+ positive (e.g., 10.0): pushing handle increases value.
+ negative (e.g., -1.0): pushing handle decreases value (inverse control).
+ syntax: 
+ .json 
+ "handle": { "row": 0, "param": "cutoff", "depth": 0.8 } 
+ shake triggers changes when the unit is physically shaken. great for "glitch" effects or temporary reverb splashes. 
+ syntax: 
+ .json 
+ "shake": { "row": 1, "param": "mix", "depth": 1.0 } 
+ lfo automatically cycles a parameter value over time. 
+ syntax: 
+ .json 
+ "lfo": {
+  "row": 0,
+  "param": "pitch",
+  "depth": 0.1,
+  "shape": "sine",
+  "speed": 4.0,
+  "phase": 0
+} 
+ its parameters include:
+ shape: sine (smooth), square (on/off), sawtooth (ramp), random (chaos).
+ speed: how fast the lfo cycles.
+ 7.9 
+ advanced modulation 
+ instead of controlling an effect, the handle can control the lfo itself. this allows you to speed up a wobble or increase a vibrato by pushing the handle. 
+ use "target": "lfo" instead of "row". 
+ syntax: 
+ .json 
+ "lfo": {
+  "row": 0,
+  "param": "balance",
+  "shape": "square",
+  "speed": 2.0
+ },
+  "handle": {
+  "target": "lfo",
+  "param": "speed",
+  "depth": 15.0
+ } 
+ in this example: the sound chops back and forth (lfo). pushing the handle makes the chopping faster. 
+ 7.10 
+ bus routing 
+ by default, effects are serial (one after another). use BUS to create parallel paths (e.g., keeping the dry signal clean while distorting a copy). 
+ add "BUS": 1 or "BUS": 2 to an effect line to route audio specifically. 
+ 7.11 
+ example preset 
+ here is a complete "broken radio" style preset based on real examples. 
+ syntax: 
+ .json 
+ {  "pos": 0,
+  "name": "BAD RECEPTION",
+  "comment": "static noise that clears up when handle is pushed",
+  "list": [
+  { "effect": "DIST", "amount": 10.0, "mix": 0.5 },
+  { "effect": "LOWPASS", "cutoff": 0.2 },
+  { "effect": "SAMPLE" }
+ ],
+"handle": {
+  "row": 1,
+  "param": "cutoff",
+  "depth": 0.8
+ },
+"shake": {
+  "row": 0,
+  "param": "mix",
+  "depth": 0.5
+ },
+"trigger": { "row": 2 }
+} 
+ audio goes through distortion (row 0) -> lowpass filter (row 1) -> sample out (row 2).
+ the lowpass filter starts closed (0.2), making it sound muffled.
+ handle: pushing the handle adds 0.8 to the cutoff, opening the filter (making it clear).
+ shake: shaking the unit increases the distortion mix.
+ ((8)) 
+ re-formating fx-mic disk 
+ if you get a “not enough disk space” message even if the fx-mic disk looks empty, try re-formatting fx-mic disk:
+connect fx-mic via USB-C, wait for “fx-mic disk” to appear, right-click on the disk, choose “erase disk” on macOS or  “format” on windows 10/11, file system should be FAT. 
+ ((9)) 
+ technical specifications 
+ dimensions and weight:
+88mm x 56 mm x 16 mm
+3.46” x 2.20” x 0.63” inches
+100g / 3.5 0z
+stereo line output:
+snr: 98 dba
+max level: 8 dbu, 2 vrms 
+ software licenses 
+ newsletter
+ retailers
+ store
+ terms
+ press
+ contact
+ returns
+ ©2026 teenage engineering
+ free shipping over $120* 14 day return policy *excludes field desk. please see terms and conditions . 
+ join our newsletter 
+ store 
+ guides 
+ downloads 
+ support 
+ press 
+ contact 
+ terms 
+ returns 
+ copyright ©
+ teenage engineering
+ all rights reserved
+ textilgatan 31
+ 120 30 stockholm
+ sweden
+ in cart 
+ 
