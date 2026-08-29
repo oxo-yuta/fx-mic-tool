@@ -6,3 +6,8 @@
 /build/
 *.tmp
 .DS_Store
+
+# 出荷時ディスクの中身。teenage engineering の著作物（サンプル音源と同梱マニュアル）
+# なので公開リポジトリには入れない。ローカルのバックアップとしてのみ保持する。
+# 内容の説明は docs/device.md §7 にある。
+/factory/
