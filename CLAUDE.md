@@ -54,7 +54,14 @@ GUI で `config.json` を設計し、マイクを通してリアルタイムに�
 python3 -m http.server 8765 --directory web   # → http://127.0.0.1:8765/
 node web/test/validate.test.mjs               # 検証ロジックが Python 版と一致するか
 node web/test/worklets.test.mjs               # SSB / HARMONY の DSP 検証
+node web/test/i18n.test.mjs                   # 全言語でキーが揃っているか
 ```
+
+UI 文言を足すときは `web/i18n.js` の**全 7 言語**に同じキーを足し、`i18n.test.mjs` で確認すること。
+エフェクト／パラメータのホバー説明（`web/descriptions.js`）は en / ja のみで、他言語は英語に落ちる。
+
+**TE 公式パックはツールに同梱しない。** 再配布禁止で、CORS も無いのでブラウザから取得もできない。
+`web/templates.js` のテンプレートは自前で書き起こしたオリジナルであること。
 
 **仕様は二重管理になっている。** エフェクトやパラメータの表を直すときは
 `tools/validate.py` と `web/spec.js` の**両方**を更新し、`node web/test/validate.test.mjs` で

@@ -241,7 +241,8 @@ export class FxEngine {
     this.lfoPhase = 0;
     this.lfoRandom = 0;
     this.micStream = null;
-    this.sampleBuffer = null;
+    this.sampleBuffers = [null, null, null, null];   // 白ボタンで選ぶ 4 スロット
+    this.sampleSlot = 0;
     this.shared = { stoppables: [], sampleOut: null, sampleRate_: 1, samplePitch: 0 };
     this._raf = null;
     this._lastT = 0;
@@ -286,7 +287,8 @@ export class FxEngine {
 
   get micActive() { return !!this.micStream; }
 
-  setSampleBuffer(buf) { this.sampleBuffer = buf; }
+  setSampleBuffer(slot, buf) { this.sampleBuffers[slot] = buf; }
+  setSampleSlot(slot) { this.sampleSlot = slot; }
 
   /** プリセット（config.json の preset オブジェクト）からチェーンを組み直す */
   setPreset(preset) {
@@ -341,10 +343,12 @@ export class FxEngine {
 
   triggerShake() { this.shake = 1; }
 
-  playSample() {
-    if (!this.sampleBuffer || !this.shared.sampleOut) return;
+  /** slot 省略時は現在選択中のスロットを鳴らす */
+  playSample(slot = this.sampleSlot) {
+    const buf = this.sampleBuffers[slot];
+    if (!buf || !this.shared.sampleOut) return;
     const src = this.ctx.createBufferSource();
-    src.buffer = this.sampleBuffer;
+    src.buffer = buf;
     const speed = this.shared.sampleRate_ ?? 1;
     const semis = this.shared.samplePitch ?? 0;
     src.playbackRate.value = clamp(speed * Math.pow(2, semis / 12), 0.05, 8);

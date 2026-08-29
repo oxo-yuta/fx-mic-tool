@@ -41,4 +41,33 @@ r.errors.forEach(e => console.log(`  ✗ ${e.where ?? ''} ${e.msg}`));
 console.log('\n--- 末尾カンマ ---');
 const r2 = validate('{\n "name": "X",\n "presets": [\n  { "pos": 0, },\n ]\n}');
 r2.errors.forEach(e => console.log(`  ✗ ${e.msg}`));
-process.exit(fail ? 1 : 0);
+if (fail) process.exitCode = 1;
+
+// ── テンプレートと辞書の健全性 ───────────────────────────
+{
+  const { TEMPLATES } = await import('../templates.js');
+  const { EFFECTS } = await import('../spec.js');
+  console.log('\n--- スターターテンプレート ---');
+  let bad = 0;
+  for (const tpl of TEMPLATES) {
+    const r = validate(JSON.stringify(tpl.config));
+    const ok = r.errors.length === 0;
+    if (!ok) bad++;
+    console.log(`${ok ? '✓' : '✗'} ${tpl.name} (presets ${(tpl.config.presets ?? []).length} / err ${r.errors.length} / warn ${r.warnings.length})`);
+    r.errors.forEach(e => console.log(`    ${e.where ?? ''} ${e.msg}`));
+  }
+
+  console.log('\n--- ホバー説明の網羅 ---');
+  const { effectDesc, paramDesc } = await import('../descriptions.js');
+  const missing = [];
+  for (const [e, s] of Object.entries(EFFECTS)) {
+    for (const lang of ['en', 'ja']) {
+      if (!effectDesc(e, lang)) missing.push(`${lang}:${e}`);
+      for (const p of Object.keys(s.params)) if (!paramDesc(e, p, lang)) missing.push(`${lang}:${e}.${p}`);
+    }
+  }
+  console.log(missing.length ? `✗ 説明なし: ${missing.join(', ')}` : '✓ en / ja とも全エフェクト・全パラメータに説明あり');
+  if (missing.length) bad++;
+
+  if (bad) process.exitCode = 1;
+}

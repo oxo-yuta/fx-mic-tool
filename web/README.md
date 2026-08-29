@@ -31,15 +31,48 @@ python3 -m http.server 8765 --directory web
 
 ## できること
 
+上部のタブで **エフェクト編集モード** と **サンプル編集モード** を切り替える。
+
+### エフェクトモード
+
 - **4 つの FX スロットを編集**。エフェクトの追加・並べ替え・削除、パラメータをスライダーで調整
 - **スロット単位で「工場出荷のまま」を選べる**。`presets` に書かないスロットは実機の内蔵プリセット
   （ECHO / SPRING / PIXIE / ROBOT）が残る（実機で確認済み。`docs/config-json.md`）
+  - オレンジボタンには clean（ランプ全消灯）の位置もあるが、編集できないので一覧には出していない
 - **handle / shake / lfo の変調**を設定し、**実効値がリアルタイムに表示される**
   （つまみはベース値のまま、右の数字が変調込みの値を示す）
-- **マイクを通したプレビュー**。ハンドルを動かすと音が変わる
-- **検証**（`tools/validate.py` と同じルール）と **1 MB 予算の表示**
+- **エフェクト名・パラメータ名にホバーすると説明が出る**
+
+### サンプルモード
+
+- 4 スロットそれぞれに wav を割り当て、`playmode` を選ぶ
+- 未割り当てのスロットは工場出荷サンプル（horn / applause / ringside bell / censor beep）のまま
+- wav のフォーマットを検証し、1 MB 予算に対する消費を表示
+- 書き出し時に wav も `config.json` と一緒にディスクへ書く
+
+> サンプルの**部分差し替え**（一部スロットだけ指定）が実機で成立するかは**未検証**。
+> プリセットでは成立することを確認済みだが、サンプルも同じとは限らないため UI 上で警告を出している。
+
+### 共通
+
+- **マイクを通したプレビュー**。ハンドルを動かすと音が変わり、シェイク中は本体の図が揺れる
+- **スターターテンプレート**（RADIO / VOICE / SPACE / EMPTY）をワンクリックで読み込み
+- **検証**（`tools/validate.py` と同じルール）。エラーが出たときだけ画面に現れる
+- **1 MB 予算の表示**
 - **ディスクに直接書き出す**（Chrome / Edge）。非対応ブラウザでは `.json` をダウンロード
 - 既存の `config.json` を読み込んで編集、上書き前にバックアップをダウンロード
+- **多言語対応**（英語 / 日本語 / 中文 / 한국어 / Español / Français / Deutsch）。
+  初期値はブラウザの言語、一致しなければ英語
+
+## テンプレートと TE 公式パック
+
+`web/templates.js` に入っている RADIO / VOICE / SPACE は**このリポジトリで書き起こしたオリジナル**で、
+TE 公式パックの値をそのまま持ってきたものではない（設計の下敷きにした手筋は `docs/reference-packs.md`）。
+
+**TE 公式パック（broken radio / mysterious / dub）は同梱していない。** teenage engineering の著作物で
+再配布が禁止されているため。CORS ヘッダが無いのでブラウザから直接取得することもできない。
+代わりに、TE の配布ページを開くリンクと、**ダウンロードした `.zip` または `config.json` をそのまま
+読み込むボタン**を用意してある（zip はブラウザ内で展開する）。
 
 ## ⚠️ プレビューは近似であって実機のエミュレータではない
 
@@ -58,6 +91,7 @@ python3 -m http.server 8765 --directory web
 | 変調の更新レート | 約 60 Hz（requestAnimationFrame）。`speed` が 10 前後の速い LFO では実機よりカクつく |
 | サンプル | プレビュー用にローカルの wav を 1 本読み込めるだけ。**4 スロットのサンプル管理と wav の書き出しは未対応**（`tools/prep-sample.sh` と `tools/deploy.sh` を使う） |
 | 音量 | 実機の出力段（2 VRMS）とは無関係。`DELAY` の `echo` は破綻を避けるため 0.95 で頭打ちにしている |
+| ホバー説明の言語 | `web/descriptions.js` は**英語と日本語のみ**。他の言語では英語が表示される（UI ラベル自体は 7 言語すべて用意してある） |
 
 ## 構成
 
@@ -66,6 +100,9 @@ web/
 ├── index.html    画面の骨格と fx-mic の SVG
 ├── styles.css    デザインシステム
 ├── app.js        状態と UI
+├── i18n.js       UI ラベルの翻訳（7 言語）
+├── descriptions.js  エフェクト／パラメータのホバー説明（en / ja）
+├── templates.js  スターターテンプレート（オリジナル）
 ├── spec.js       エフェクト定義（tools/validate.py の表と同じ内容）
 ├── validate.js   検証（tools/validate.py の移植）
 ├── audio.js      Web Audio によるチェーン構築と変調
@@ -81,8 +118,9 @@ web/
 ブラウザなしで DSP と検証ロジックを確認できる。
 
 ```bash
-node web/test/validate.test.mjs   # tools/validate.py と同じ結果になるか
+node web/test/validate.test.mjs   # tools/validate.py と同じ結果になるか / テンプレートと説明の網羅
 node web/test/worklets.test.mjs   # SSB / HARMONY が意図どおり周波数を動かすか
+node web/test/i18n.test.mjs       # 全言語でキーとプレースホルダが揃っているか
 ```
 
 ## デザインについて

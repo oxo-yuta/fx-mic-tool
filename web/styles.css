@@ -85,7 +85,7 @@ body {
 .panel__bar .spacer { flex: 1; }
 .panel__body { padding: 12px; }
 
-/* 四隅のネジ頭 */
+/* 四隅のネジ頭。装飾なので最背面に置き、UI 要素と重ならないようにする */
 .screws::before, .screws::after,
 .screws > .screw-b::before, .screws > .screw-b::after {
   content: '';
@@ -94,7 +94,10 @@ body {
   border: 1px solid var(--grey);
   border-radius: 50%;
   background: var(--panel-3);
+  z-index: 0;
+  pointer-events: none;
 }
+.panel__bar, .panel__body, .slots { position: relative; z-index: 1; }
 /* 上のネジはオレンジのタイトルバーを避けて本体側に置く */
 .screws::before { top: 30px; left: 5px; }
 .screws::after  { top: 30px; right: 5px; }
@@ -308,3 +311,136 @@ select, input[type=text], input[type=number] {
 
 .stack { display: flex; flex-direction: column; gap: 10px; }
 .rowflex { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+
+
+/* ─────────────────────── 追加分 ─────────────────────── */
+
+/* モード切り替え */
+.modes { display: flex; margin-left: 8px; }
+.mode {
+  box-shadow: none;
+  border-right: 0;
+  padding: 8px 18px;
+  background: var(--panel-2);
+}
+.mode:last-child { border-right: 1px solid var(--ink); }
+.mode.is-on { background: var(--orange); color: var(--white); }
+.mode.is-on:hover { background: var(--orange); }
+
+.masthead__right { display: flex; align-items: center; gap: 7px; margin-left: auto; }
+.masthead__right select { padding: 5px 6px; }
+
+/* タイトルバー内の小ボタン */
+.bar-btn {
+  box-shadow: none;
+  padding: 1px 7px;
+  font-size: 9px;
+  background: rgba(255,255,255,.9);
+  border-color: rgba(0,0,5,.5);
+}
+.bar-btn.is-done { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+.panel__bar.is-error { background: #b22e20; }
+
+/* 危険寄りの操作（工場出荷に戻す）は右寄せして色を分ける */
+.danger-bar { display: flex; justify-content: flex-end; margin-top: 2px; }
+button.is-danger {
+  background: var(--panel-2);
+  color: #7a1f0d;
+  border-color: #7a1f0d;
+}
+button.is-danger:hover { background: #f3d9d2; }
+
+/* シェイク中の本体の揺れ。ゆっくり・わずかに。 */
+.device-wrap { transform-origin: 50% 60%; }
+.device-wrap.is-shaking { animation: fxmic-shake 420ms ease-in-out infinite; }
+@keyframes fxmic-shake {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(-1.5px, 0.5px) rotate(-0.5deg); }
+  50%  { transform: translate(0, -1px) rotate(0deg); }
+  75%  { transform: translate(1.5px, 0.5px) rotate(0.5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .device-wrap.is-shaking { animation: none; }
+}
+
+/* マイク動作ランプの点灯 */
+#micLampGlow { transition: opacity .18s ease; }
+
+/* テンプレート一覧 */
+.tpl-list { display: flex; flex-direction: column; gap: 5px; }
+/* button と a の両方で同じ見た目になるように、必要な指定を全部書く */
+.tpl {
+  display: flex; align-items: baseline; gap: 8px;
+  text-align: left;
+  padding: 7px 9px;
+  background: var(--panel-3);
+  border: 1px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--ink);
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--ui);
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  width: 100%;
+}
+.tpl:hover { background: var(--white); }
+.tpl:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--shadow); }
+.tpl b {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  flex: none;
+}
+.tpl span { font-size: 10px; color: var(--ink-soft); line-height: 1.4; }
+.tpl-divider {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--grey);
+  margin-top: 3px;
+}
+.tpl-divider::after { content: ''; flex: 1; height: 1px; background: var(--panel-edge); }
+
+/* サンプルスロット */
+.smp { border: 1px solid var(--ink); background: var(--panel-3); box-shadow: 2px 2px 0 rgba(0,0,5,.18); }
+.smp.is-active { outline: 2px solid var(--orange); outline-offset: 1px; }
+.smp__head { display: flex; align-items: center; gap: 8px; padding: 5px 8px; background: var(--panel-2); border-bottom: 1px solid var(--panel-edge); }
+.smp__n { font-family: var(--mono); font-size: 9px; font-weight: 700; background: var(--ink); color: var(--white); width: 16px; height: 16px; display: grid; place-items: center; flex: none; }
+.smp__name { flex: 1; font-size: 11px; font-weight: 700; letter-spacing: .05em; }
+.smp__body { padding: 7px 9px 9px; display: flex; flex-direction: column; gap: 6px; }
+.smp__meta { font-family: var(--mono); font-size: 9px; color: var(--ink-soft); }
+.smp.is-empty .smp__name { font-style: italic; font-weight: 400; color: var(--grey); }
+
+#jsonOut { font-family: var(--mono); font-size: 10px; line-height: 1.5; margin: 0; max-height: 340px; overflow: auto; white-space: pre-wrap; }
+
+
+/* ホバー説明 */
+[data-tip] { cursor: help; }
+.row__name[data-tip], .param__name[data-tip] {
+  text-decoration: underline dotted rgba(0,0,5,.35);
+  text-underline-offset: 3px;
+}
+.tooltip {
+  position: fixed;
+  z-index: 60;
+  max-width: 300px;
+  padding: 7px 9px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 10px;
+  line-height: 1.55;
+  box-shadow: 3px 3px 0 var(--shadow);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .1s ease;
+}
+.tooltip.is-on { opacity: 1; }
+.tooltip b {
+  display: block;
+  color: var(--orange);
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
