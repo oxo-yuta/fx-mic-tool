@@ -44,6 +44,25 @@ build/          転送前バックアップの退避先（gitignore）
 **`packs/<name>/` の中身 = ディスクのルート**。この 1:1 対応を崩さない。
 実機に転送されるのは **`config.json` と `*.wav` のみ**（`README.md` 等は除外される）。
 
+## Web エディタ（web/）
+
+GUI で `config.json` を設計し、マイクを通してリアルタイムに音を確認できるツール。
+ビルド不要の静的ファイルのみ（相対パス）なので、GitHub Pages でも LP のサブディレクトリでも
+`web/` を置くだけで動く。詳細と既知の制約は `web/README.md`。
+
+```bash
+python3 -m http.server 8765 --directory web   # → http://127.0.0.1:8765/
+node web/test/validate.test.mjs               # 検証ロジックが Python 版と一致するか
+node web/test/worklets.test.mjs               # SSB / HARMONY の DSP 検証
+```
+
+**仕様は二重管理になっている。** エフェクトやパラメータの表を直すときは
+`tools/validate.py` と `web/spec.js` の**両方**を更新し、`node web/test/validate.test.mjs` で
+一致を確認すること。
+
+**プレビューは近似であって実機のエミュレータではない。** 内蔵プリセットは再現できず、
+HARMONY / SSB / REVERB / DIST は近似、BUS は未実装。**最終確認は必ず実機で行う。**
+
 ## よく使うコマンド
 
 ```bash

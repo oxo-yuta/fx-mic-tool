@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fx-mic editor — EP–2350</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ─────────────────────────── ヘッダ ─────────────────────────── -->
+  <header class="masthead">
+    <div class="logo">
+      <div class="logo__mark">FX</div>
+      <div class="logo__name"><b>MIC</b><span>EDITOR</span></div>
+    </div>
+    <div class="masthead__meta">
+      <div class="rowflex">
+        <span class="chip is-orange">EP–2350</span>
+        <span class="chip is-grey" id="diskChip">DISK: 未接続</span>
+        <span class="chip is-grey" id="micChip">MIC: OFF</span>
+      </div>
+      <div class="ver">V 0.1.0 · プレビューは近似です</div>
+    </div>
+    <div class="spacer" style="flex:1"></div>
+    <div class="rowflex">
+      <button id="btnHelp">? help</button>
+    </div>
+  </header>
+
+  <!-- ─────────────────────── 左: デバイス ─────────────────────── -->
+  <div class="stack">
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar">fx-mic<span class="spacer"></span><span id="deviceState">idle</span></div>
+      <div class="panel__body">
+
+        <svg class="device" id="device" viewBox="10 8 250 314" role="img" aria-label="fx-mic の操作パネル">
+          <!-- 本体 -->
+          <rect x="44" y="18" width="180" height="292" fill="#e7e7e5" stroke="#000005" stroke-width="2"/>
+          <!-- マイクグリル -->
+          <rect x="44" y="18" width="180" height="163" fill="#2f2f2f" stroke="#000005" stroke-width="2"/>
+          <g id="grille" fill="#4a4a4a"></g>
+
+          <!-- ハンドル（レバー）。押し込み量でこの角度が変わる -->
+          <g id="handleGroup" class="hit">
+            <!-- 本体左端（x=44）より外側に大きくはみ出し、先端だけが本体に食い込む形 -->
+            <path id="handle"
+                  d="M46 30 L22 58 C11 110 17 160 34 186 L74 202 C57 143 49 81 48 30 Z"
+                  fill="#e05526" stroke="#000005" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="33" cy="78" r="4.5" fill="#000005"/>
+          </g>
+
+          <!-- 右エッジのボタン（タブ） -->
+          <g id="btnFx" class="hit">
+            <rect x="224" y="52" width="15" height="30" fill="#e05526" stroke="#000005" stroke-width="2"/>
+          </g>
+          <g id="btnSampleSel" class="hit">
+            <rect x="224" y="112" width="15" height="28" fill="#e7e7e5" stroke="#000005" stroke-width="2"/>
+          </g>
+          <g id="btnTrig" class="hit">
+            <rect x="224" y="196" width="15" height="28" fill="#9aa0a9" stroke="#000005" stroke-width="2"/>
+          </g>
+
+          <!-- LED インジケータ（グリル内の縦列） -->
+          <rect x="192" y="40" width="17" height="72" fill="#1b1b1b" stroke="#000005" stroke-width="1.5"/>
+          <g id="ledFx"></g>
+          <rect x="192" y="122" width="17" height="52" fill="#1b1b1b" stroke="#000005" stroke-width="1.5"/>
+          <g id="ledSample"></g>
+
+          <!-- 下部パネル -->
+          <text x="66" y="222" font-family="Space Grotesk, sans-serif" font-size="26" font-weight="700" fill="#221f1f">MIC</text>
+          <text x="118" y="215" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700" fill="#e05526">FX</text>
+          <!-- 音量ポテンショメータ -->
+          <circle cx="76" cy="266" r="15" fill="#e05526" stroke="#000005" stroke-width="2"/>
+          <path d="M66 258 L86 274 M66 266 L86 282 M70 254 L86 266" stroke="#000005" stroke-width="1.4" opacity=".55"/>
+          <!-- 電源 LED -->
+          <circle id="powerLed" cx="134" cy="288" r="5" fill="#6b6b6b" stroke="#000005" stroke-width="1.2"/>
+          <!-- ネジ -->
+          <g fill="none" stroke="#8a959a" stroke-width="1.6">
+            <circle cx="58" cy="196" r="5"/><circle cx="210" cy="196" r="5"/>
+            <circle cx="58" cy="296" r="5"/><circle cx="210" cy="296" r="5"/>
+          </g>
+        </svg>
+
+        <div class="handle-rail">
+          <span class="chip is-light">handle</span>
+          <input type="range" id="handleSlider" min="0" max="100" value="0">
+          <span class="param__val" id="handleVal">0%</span>
+        </div>
+
+        <div class="rowflex" style="margin-top:10px">
+          <button id="btnMic" class="is-primary">▶ マイク ON</button>
+          <button id="btnShake">shake</button>
+          <button id="btnPlay">▸ sample</button>
+        </div>
+
+        <canvas class="scope" id="scope" width="600" height="112" style="margin-top:10px"></canvas>
+
+        <p class="hint" style="margin:9px 0 0">
+          ハンドルを押している間だけマイクが有効になります（実機と同じ）。
+          図のオレンジ／白／グレーのタブはクリックできます。
+        </p>
+      </div>
+    </section>
+
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar">sample<span class="spacer"></span><span id="sampleName">工場出荷</span></div>
+      <div class="panel__body stack">
+        <div class="rowflex">
+          <button id="btnLoadSample" class="is-small">wav を選ぶ</button>
+          <button id="btnClearSample" class="is-small">クリア</button>
+          <input type="file" id="fileSample" accept=".wav,audio/wav" class="hidden">
+        </div>
+        <div class="param__val" id="sampleInfo" style="text-align:left">
+          未読み込み。プレビュー用にローカルの wav を読み込めます（ディスクには書きません）。
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ─────────────────────── 中央: エディタ ─────────────────────── -->
+  <div class="stack">
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar">presets<span class="spacer"></span><span>orange button</span></div>
+      <div class="slots" id="slots"></div>
+    </section>
+
+    <section class="panel screws" id="editorPanel">
+      <div class="screw-b"></div>
+      <div class="panel__bar">
+        <span id="editorTitle">effect chain</span><span class="spacer"></span>
+        <span id="editorPos"></span>
+      </div>
+      <div class="panel__body stack" id="editorBody"></div>
+    </section>
+  </div>
+
+  <!-- ─────────────────────── 右: ディスクと検証 ─────────────────── -->
+  <div class="stack">
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar">fx-mic disk<span class="spacer"></span><span id="diskName">—</span></div>
+      <div class="panel__body stack">
+        <div class="rowflex">
+          <button id="btnConnect" class="is-primary">ディスクを選ぶ</button>
+          <button id="btnReload" disabled class="is-small">読み込み</button>
+        </div>
+        <div class="budget"><div class="budget__fill" id="budgetFill"></div><div class="budget__label" id="budgetLabel">—</div></div>
+        <div class="diag" id="diskFiles"></div>
+        <div class="rowflex">
+          <button id="btnWrite" class="is-primary" disabled>ディスクに書き出す</button>
+          <button id="btnDownload" class="is-small">.json を保存</button>
+        </div>
+        <p class="hint" id="diskHint"></p>
+      </div>
+    </section>
+
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar">validation<span class="spacer"></span><span id="validSummary">—</span></div>
+      <div class="panel__body"><div class="diag" id="diag"></div></div>
+    </section>
+
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar">config.json<span class="spacer"></span>
+        <button id="btnCopy" class="is-small" style="box-shadow:none;padding:1px 6px">copy</button>
+      </div>
+      <div class="panel__body">
+        <pre id="jsonOut" style="font-family:var(--mono);font-size:10px;line-height:1.5;margin:0;max-height:340px;overflow:auto;white-space:pre-wrap"></pre>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

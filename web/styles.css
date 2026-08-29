@@ -1,0 +1,310 @@
+/* ─────────────────────────────────────────────────────────────
+   fx-mic editor — teenage engineering "ep sample tool" の意匠を参考にした
+   デザインシステム。方眼紙の背景・機材のフラットイラスト・オレンジの
+   タイトルバー・角丸なしの硬いエッジ・小さな大文字のチップラベル。
+
+   フォントは TE の TechnoType34 / UniversTE20T が独自書体で使えないため、
+   Google Fonts の Space Grotesk / Space Mono で近い質感を出している。
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --orange:        #e05526;
+  --orange-dim:    #b8441e;
+  --ink:           #000005;
+  --ink-soft:      #221f1f;
+  --panel:         #dbdddb;
+  --panel-2:       #d2d3d4;
+  --panel-3:       #e5e6e6;
+  --panel-edge:    #b2aca1;
+  --grid:          #9aa0a9;
+  --grid-bg:       #abb5ba;
+  --grey:          #818e95;
+  --grey-2:        #8a959a;
+  --white:         #ffffff;
+  --shadow:        rgba(0, 0, 5, .35);
+
+  --ui:   'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'Space Mono', 'SFMono-Regular', Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--ui);
+  font-size: 12px;
+  color: var(--ink);
+  background-color: var(--grid-bg);
+  /* 方眼紙 */
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.30) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.30) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0,0,20,.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,20,.06) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── 共通の型 ─────────────────────────────────────────────── */
+
+.chip {
+  display: inline-block;
+  padding: 2px 7px 1px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  background: var(--ink);
+  color: var(--white);
+  white-space: nowrap;
+}
+.chip.is-orange { background: var(--orange); }
+.chip.is-grey   { background: var(--grey); }
+.chip.is-light  { background: var(--panel-2); color: var(--ink); }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--shadow);
+  position: relative;
+}
+.panel__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--orange);
+  color: var(--white);
+  padding: 5px 10px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.panel__bar .spacer { flex: 1; }
+.panel__body { padding: 12px; }
+
+/* 四隅のネジ頭 */
+.screws::before, .screws::after,
+.screws > .screw-b::before, .screws > .screw-b::after {
+  content: '';
+  position: absolute;
+  width: 6px; height: 6px;
+  border: 1px solid var(--grey);
+  border-radius: 50%;
+  background: var(--panel-3);
+}
+/* 上のネジはオレンジのタイトルバーを避けて本体側に置く */
+.screws::before { top: 30px; left: 5px; }
+.screws::after  { top: 30px; right: 5px; }
+.screws > .screw-b::before { bottom: 5px; left: 5px; }
+.screws > .screw-b::after  { bottom: 5px; right: 5px; }
+
+/* ── レイアウト ───────────────────────────────────────────── */
+
+.app {
+  display: grid;
+  grid-template-columns: 340px minmax(430px, 1fr) 330px;
+  gap: 22px;
+  padding: 22px;
+  align-items: start;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+@media (max-width: 1180px) { .app { grid-template-columns: 1fr; } }
+
+/* ── ヘッダ ──────────────────────────────────────────────── */
+
+.masthead {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.logo { display: flex; border: 1px solid var(--ink); box-shadow: 3px 3px 0 var(--shadow); }
+.logo__mark {
+  background: var(--orange);
+  color: var(--white);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  padding: 6px 14px 4px;
+  border-right: 1px solid var(--ink);
+}
+.logo__name {
+  background: var(--panel-3);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 4px 12px;
+}
+.logo__name b { font-size: 11px; font-weight: 700; letter-spacing: .16em; }
+.logo__name span { font-size: 11px; letter-spacing: .16em; color: var(--ink-soft); }
+.masthead__meta { padding-top: 4px; display: flex; flex-direction: column; gap: 5px; }
+.masthead__meta .ver { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; color: var(--ink-soft); }
+
+/* ── デバイス図 ───────────────────────────────────────────── */
+
+.device { display: block; width: 100%; height: auto; }
+.device .hit { cursor: pointer; }
+.device .hit:hover { opacity: .82; }
+
+.handle-rail {
+  margin-top: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.handle-rail input[type=range] { flex: 1; }
+
+/* ── スライダー（TE 風の角ばったつまみ） ────────────────────── */
+
+input[type=range] {
+  -webkit-appearance: none; appearance: none;
+  height: 18px; background: transparent; width: 100%; margin: 0;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  height: 4px; background: var(--grey); border: 1px solid var(--ink);
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px; height: 17px; margin-top: -8px;
+  background: var(--panel-3); border: 1px solid var(--ink);
+  box-shadow: 1px 1px 0 var(--shadow);
+  cursor: grab;
+}
+input[type=range]:active::-webkit-slider-thumb { cursor: grabbing; background: var(--orange); }
+input[type=range]::-moz-range-track { height: 4px; background: var(--grey); border: 1px solid var(--ink); }
+input[type=range]::-moz-range-thumb {
+  width: 9px; height: 15px; border-radius: 0;
+  background: var(--panel-3); border: 1px solid var(--ink);
+}
+
+/* ── プリセットスロット ────────────────────────────────────── */
+
+.slots { display: flex; flex-direction: column; }
+.slot {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--panel-edge);
+  cursor: pointer;
+  background: var(--panel-3);
+}
+.slot:last-child { border-bottom: 0; }
+.slot:hover { background: var(--white); }
+.slot.is-active { background: var(--orange); color: var(--white); }
+.slot.is-active .slot__pos { background: var(--white); color: var(--orange); }
+.slot.is-factory { background: var(--panel-2); color: var(--grey); font-style: italic; }
+.slot.is-factory.is-active { background: var(--grey); color: var(--white); font-style: italic; }
+.slot__pos {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  background: var(--ink); color: var(--white);
+  width: 17px; height: 17px; display: grid; place-items: center; flex: none;
+}
+.slot__name { flex: 1; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.slot__meta { font-family: var(--mono); font-size: 9px; opacity: .75; }
+
+/* ── エフェクトチェーン ────────────────────────────────────── */
+
+.chain { display: flex; flex-direction: column; gap: 7px; }
+.row {
+  border: 1px solid var(--ink);
+  background: var(--panel-3);
+  box-shadow: 2px 2px 0 rgba(0,0,5,.18);
+}
+.row.is-sample { background: #e9e2cf; }
+.row__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 8px;
+  background: var(--panel-2);
+  border-bottom: 1px solid var(--panel-edge);
+}
+.row__idx {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  background: var(--ink); color: var(--white);
+  width: 16px; height: 16px; display: grid; place-items: center; flex: none;
+}
+.row__name { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; flex: 1; }
+.row__body { padding: 7px 9px 9px; display: flex; flex-direction: column; gap: 4px; }
+
+.param { display: grid; grid-template-columns: 96px 1fr 56px; align-items: center; gap: 8px; }
+.param__name { font-size: 10px; letter-spacing: .04em; color: var(--ink-soft); }
+.param__val { font-family: var(--mono); font-size: 10px; text-align: right; }
+.param.is-modulated .param__name { color: var(--orange); font-weight: 700; }
+.param.is-modulated .param__name::after { content: ' ●'; font-size: 8px; }
+
+/* ── ボタン ──────────────────────────────────────────────── */
+
+button {
+  font-family: var(--ui);
+  font-size: 10px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase;
+  padding: 6px 11px;
+  border: 1px solid var(--ink);
+  background: var(--panel-3);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+button:hover { background: var(--white); }
+button:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--shadow); }
+button:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+button.is-primary { background: var(--orange); color: var(--white); border-color: var(--ink); }
+button.is-primary:hover { background: var(--orange-dim); }
+button.is-on { background: var(--orange); color: var(--white); }
+button.is-small { padding: 3px 7px; font-size: 9px; box-shadow: 1px 1px 0 var(--shadow); }
+
+select, input[type=text], input[type=number] {
+  font-family: var(--mono); font-size: 10px;
+  border: 1px solid var(--ink); background: var(--white);
+  padding: 3px 5px; color: var(--ink);
+}
+
+/* ── 波形 ────────────────────────────────────────────────── */
+
+.scope {
+  width: 100%; height: 56px; display: block;
+  background: var(--ink); border: 1px solid var(--ink);
+}
+
+/* ── 検証結果 ─────────────────────────────────────────────── */
+
+.diag { display: flex; flex-direction: column; gap: 3px; font-family: var(--mono); font-size: 10px; }
+.diag__item { display: flex; gap: 6px; padding: 3px 5px; line-height: 1.45; }
+.diag__item.is-error { background: #f3d9d2; color: #7a1f0d; }
+.diag__item.is-warn  { background: #f1ece1; color: #5a4a12; }
+.diag__item.is-note  { color: var(--ink-soft); }
+.diag__where { opacity: .7; flex: none; }
+
+.budget { height: 14px; border: 1px solid var(--ink); background: var(--panel-3); position: relative; }
+.budget__fill { height: 100%; background: var(--orange); }
+.budget__fill.is-over { background: #b22e20; }
+.budget__label {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .05em;
+  mix-blend-mode: difference; color: var(--white);
+}
+
+/* ── ヘルプのふきだし（ep sample tool の矢印ラベル） ───────── */
+
+.callout {
+  position: absolute; z-index: 20;
+  background: var(--grey); color: var(--white);
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: 4px 9px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+.callout::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 9px;
+  background: var(--grey);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.callout.to-right::after { right: -9px; }
+.callout.to-left::after  { left: -9px; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+
+.hidden { display: none !important; }
+
+.hint { font-size: 10px; line-height: 1.6; color: var(--ink-soft); }
+.hint code { font-family: var(--mono); background: var(--panel-2); padding: 0 3px; }
+
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.rowflex { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
