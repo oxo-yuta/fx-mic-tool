@@ -11,7 +11,7 @@
 .
 ├── CLAUDE.md                  このリポジトリで作業するときの指示
 ├── docs/                      仕様・リファレンス
-├── factory/                   出荷時ディスクの中身（変更禁止・バックアップ）
+├── factory/                   出荷時ディスクの中身（変更禁止・gitignore）
 ├── packs/                     ★作業対象。1 パック = fx-mic disk に転送する 1 セット
 │   ├── _template/             新規パックの雛形
 │   └── <pack-name>/

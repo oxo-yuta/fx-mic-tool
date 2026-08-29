@@ -20,7 +20,9 @@ teenage engineering **EP–2350 fx-mic** のカスタマイズ用リポジトリ
 1. **`config.json` の構文が壊れると fx-mic は起動しなくなる。**
    転送前に必ず `python3 tools/validate.py packs/<名前>` を通し、**エラーが 0 件でなければ転送しない**。
    （復旧は白 + グレーボタンを押しながら起動）
-2. **`factory/` は変更しない。** 出荷時ディスクの中身のバックアップ。
+2. **`factory/` は変更しない。** 出荷時ディスクの中身のバックアップで、**gitignore してある**。
+   TE の著作物（工場出荷サンプルと同梱マニュアル）なので**コミットも公開もしない**。
+   ローカルにしか無いため、参照する記述を書くときは「手元にある人だけが見られる」前提で書くこと。
 3. **`vendor/` をコミットしない。** teenage engineering の著作物で再配布禁止（`.gitignore` 済み）。
    TE のサンプル wav を `packs/` にコピーして配布する形にもしないこと。
 4. **合計 1 MB の制約を常に意識する。** wav 4 本 + config.json でこの予算。設計は秒数の配分から始める。
@@ -32,7 +34,7 @@ teenage engineering **EP–2350 fx-mic** のカスタマイズ用リポジトリ
 ```
 CLAUDE.md
 docs/           仕様・リファレンス
-factory/        出荷時ディスクの中身（変更禁止）
+factory/        出荷時ディスクの中身（変更禁止・gitignore）
 packs/          ★作業対象。1 ディレクトリ = 転送 1 セット
   _template/    新規パックの雛形
 tools/          validate.py / prep-sample.sh / deploy.sh

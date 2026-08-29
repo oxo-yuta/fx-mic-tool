@@ -39,6 +39,6 @@ python3 -m http.server 8765 --directory web   # → http://127.0.0.1:8765/
 | `packs/` | 作業対象。1 ディレクトリ = 実機に転送する 1 セット |
 | `docs/` | 仕様・リファレンス |
 | `tools/` | `validate.py`（検証） / `prep-sample.sh`（wav 変換） / `deploy.sh`（転送） |
-| `factory/` | 出荷時ディスクの中身のバックアップ（変更禁止） |
+| `factory/` | 出荷時ディスクの中身のバックアップ（変更禁止・**gitignore**。TE の著作物のため公開しない） |
 | `reference/` | 公式ドキュメントのローカルキャッシュ |
 | `vendor/` | TE 公式パック（再配布禁止・gitignore） |
