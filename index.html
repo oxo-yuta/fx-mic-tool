@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fx-mic editor — EP–2350</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ─────────────────────────── ヘッダ ─────────────────────────── -->
+  <header class="masthead">
+    <div class="logo">
+      <div class="logo__mark">FX</div>
+      <div class="logo__name"><b>MIC</b><span>EDITOR</span></div>
+    </div>
+
+    <div class="masthead__meta">
+      <div class="rowflex">
+        <span class="chip is-orange">EP–2350</span>
+        <span class="chip is-grey" id="diskChip"></span>
+        <span class="chip is-grey" id="micChip"></span>
+      </div>
+      <div class="ver">V 0.2.0 · <span id="subtitle"></span></div>
+    </div>
+
+    <div class="modes" id="modes">
+      <button class="mode is-on" data-mode="fx" id="modeFx"></button>
+      <button class="mode" data-mode="sample" id="modeSample"></button>
+    </div>
+
+    <div class="masthead__right">
+      <select id="langSelect" aria-label="language"></select>
+      <!-- GitHub リポジトリ。SVG は GitHub Octicons の mark-github（MIT）を素の path で埋め込む。 -->
+      <a class="icon-link" id="repoLink"
+         href="https://github.com/oxo-yuta/fx-mic-tool"
+         target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ─────────────────────── 左: デバイス ─────────────────────── -->
+  <div class="stack">
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar"><span id="panelDevice"></span><span class="spacer"></span><span id="deviceState"></span></div>
+      <div class="panel__body">
+
+        <div class="device-wrap" id="deviceWrap">
+        <svg class="device" id="device" viewBox="-28 10 272 308" role="img" aria-label="fx-mic">
+          <!-- ハンドル。本体より先に描いて背面に置くので、本体の左からはみ出た部分だけが見える。
+               回転軸は板の下端の一点（44,228）で、本体の中にある。
+               押し込み 100% で左辺が本体の左辺とほぼ平行になり、開放 0% で 16 度外に開く。
+               右辺は垂直から 22 度傾けてあるので、開いても本体との間に隙間ができない。 -->
+          <g id="handleGroup" class="hit">
+            <path id="handle"
+                  d="M44 228 L18 62 L117 47 Z"
+                  fill="#e05526" stroke="#000005" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="32" cy="122" r="4" fill="#000005" opacity=".5"/>
+          </g>
+          <!-- 本体 -->
+          <rect x="44" y="18" width="180" height="292" fill="#e7e7e5" stroke="#000005" stroke-width="2"/>
+          <rect x="44" y="18" width="180" height="163" fill="#2f2f2f" stroke="#000005" stroke-width="2"/>
+          <g id="grille" fill="#4a4a4a"></g>
+
+          <!-- 右エッジのボタン -->
+          <g id="btnFx" class="hit">
+            <rect x="224" y="52" width="15" height="30" fill="#e05526" stroke="#000005" stroke-width="2"/>
+          </g>
+          <g id="btnSampleSel" class="hit">
+            <rect x="224" y="112" width="15" height="28" fill="#e7e7e5" stroke="#000005" stroke-width="2"/>
+          </g>
+          <g id="btnTrig" class="hit">
+            <rect x="224" y="196" width="15" height="28" fill="#9aa0a9" stroke="#000005" stroke-width="2"/>
+          </g>
+
+          <!-- LED（実機と同じく FX 4 個 / サンプル 4 個） -->
+          <rect x="192" y="44" width="17" height="59" fill="#1b1b1b" stroke="#000005" stroke-width="1.5"/>
+          <g id="ledFx"></g>
+          <rect x="192" y="118" width="17" height="59" fill="#1b1b1b" stroke="#000005" stroke-width="1.5"/>
+          <g id="ledSample"></g>
+
+          <text x="66" y="222" font-family="Space Grotesk, sans-serif" font-size="26" font-weight="700" fill="#221f1f">MIC</text>
+          <text x="118" y="215" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="700" fill="#e05526">FX</text>
+          <circle cx="76" cy="266" r="15" fill="#e05526" stroke="#000005" stroke-width="2"/>
+          <path d="M66 258 L86 274 M66 266 L86 282 M70 254 L86 266" stroke="#000005" stroke-width="1.4" opacity=".55"/>
+
+          <!-- マイク動作ランプ -->
+          <g id="micLamp">
+            <circle id="micLampGlow" cx="134" cy="288" r="13" fill="#ff2d1a" opacity="0"/>
+            <circle id="powerLed" cx="134" cy="288" r="5.5" fill="#6b6b6b" stroke="#000005" stroke-width="1.2"/>
+          </g>
+
+          <g fill="none" stroke="#8a959a" stroke-width="1.6">
+            <circle cx="58" cy="196" r="5"/><circle cx="210" cy="196" r="5"/>
+            <circle cx="58" cy="296" r="5"/><circle cx="210" cy="296" r="5"/>
+          </g>
+        </svg>
+        </div>
+
+        <div class="handle-rail">
+          <span class="chip is-light" id="handleLabel"></span>
+          <input type="range" id="handleSlider" min="0" max="100" value="0">
+          <span class="param__val" id="handleVal">0%</span>
+        </div>
+
+        <div class="rowflex" style="margin-top:10px">
+          <button id="btnMic" class="is-primary"></button>
+          <button id="btnShake"></button>
+          <button id="btnPlay"></button>
+        </div>
+
+        <canvas class="scope" id="scope" width="600" height="112" style="margin-top:10px"></canvas>
+        <p class="hint" id="deviceHint" style="margin:9px 0 0"></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ─────────────────────── 中央: エディタ ─────────────────────── -->
+  <div class="stack" id="centerCol">
+
+    <!-- FX モード -->
+    <div class="stack" id="fxMode">
+      <section class="panel screws">
+        <div class="screw-b"></div>
+        <div class="panel__bar"><span id="panelPresets"></span><span class="spacer"></span><span id="presetsHint"></span></div>
+        <div class="slots" id="slots"></div>
+      </section>
+
+      <section class="panel screws">
+        <div class="screw-b"></div>
+        <div class="panel__bar">
+          <span id="editorTitle"></span><span class="spacer"></span><span id="editorPos"></span>
+        </div>
+        <div class="panel__body stack" id="editorBody"></div>
+      </section>
+    </div>
+
+    <!-- SAMPLE モード -->
+    <div class="stack hidden" id="sampleMode">
+      <section class="panel screws">
+        <div class="screw-b"></div>
+        <div class="panel__bar"><span id="panelSamples"></span><span class="spacer"></span><span id="sampleBudget"></span></div>
+        <div class="panel__body stack">
+          <p class="hint" id="samplesHint"></p>
+          <div class="stack" id="sampleSlots"></div>
+          <div class="diag" id="sampleWarn"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ─────────────────────── 右: テンプレート / ディスク ─────────── -->
+  <div class="stack">
+
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar"><span>templates</span></div>
+      <div class="panel__body stack">
+        <div class="tpl-list" id="templates"></div>
+        <div class="tpl-divider"><span>teenage engineering</span></div>
+        <div class="tpl-list" id="tePacks"></div>
+        <input type="file" id="filePack" accept=".json,.zip,application/json,application/zip" class="hidden">
+        <p class="hint" id="teHint"></p>
+      </div>
+    </section>
+
+    <section class="panel screws">
+      <div class="screw-b"></div>
+      <div class="panel__bar"><span id="panelDisk"></span><span class="spacer"></span><span id="diskName"></span></div>
+      <div class="panel__body stack">
+        <div class="rowflex">
+          <button id="btnConnect" class="is-primary"></button>
+          <button id="btnReload" disabled class="is-small"></button>
+        </div>
+        <div class="budget"><div class="budget__fill" id="budgetFill"></div><div class="budget__label" id="budgetLabel"></div></div>
+        <div class="diag" id="diskFiles"></div>
+        <div class="rowflex">
+          <button id="btnWrite" class="is-primary" disabled></button>
+          <button id="btnDownload" class="is-small"></button>
+        </div>
+        <p class="hint" id="diskHint"></p>
+      </div>
+    </section>
+
+    <!-- 通常は隠れていて、検証エラーが出たときだけ現れる -->
+    <section class="panel screws hidden" id="errorPanel">
+      <div class="screw-b"></div>
+      <div class="panel__bar is-error"><span id="errorTitle"></span></div>
+      <div class="panel__body"><div class="diag" id="diag"></div></div>
+    </section>
+
+    <section class="panel screws is-collapsed" id="jsonPanel">
+      <div class="screw-b"></div>
+      <div class="panel__bar">
+        <span id="panelJson"></span><span class="spacer"></span>
+        <button id="btnCopy" class="bar-btn"></button>
+        <button id="btnToggleJson" class="bar-btn"></button>
+      </div>
+      <div class="panel__body hidden" id="jsonBody">
+        <pre id="jsonOut"></pre>
+      </div>
+    </section>
+  </div>
+
+  <footer class="colophon">
+    <p id="footerUnofficial"></p>
+    <p id="footerSimulation"></p>
+    <p><a href="https://github.com/oxo-yuta/fx-mic-tool" target="_blank" rel="noopener">github.com/oxo-yuta/fx-mic-tool</a></p>
+  </footer>
+
+</div>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
