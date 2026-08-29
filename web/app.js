@@ -15,6 +15,7 @@ import { Disk, supported as diskSupported, download } from './disk.js';
 import { TEMPLATES } from './templates.js';
 import { t, setLang, getLang, LANGS } from './i18n.js';
 import { effectDesc, paramDesc } from './descriptions.js';
+import { UNVERIFIED_PARAMS } from './spec.js';
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => {
@@ -177,19 +178,21 @@ function setHandle(v) {
 function paintDevice() {
   const h = Number($('handleSlider').value) / 100;
   $('handleVal').textContent = `${Math.round(h * 100)}%`;
-  // 回転軸は本体側（46,46）。ハンドルは本体より背面に描いてあるので、はみ出しても自然に見える。
-  $('handleGroup').setAttribute('transform', `rotate(${(-14 * (1 - h)).toFixed(2)} 46 46)`);
+  // 回転軸は下端の一点（44,228）で、本体の中にある。
+  // 押し込み 100% で左辺が本体の左辺とほぼ平行になり、開放するとそこから 16 度外に開く。
+  $('handleGroup').setAttribute('transform', `rotate(${(-16 * (1 - h)).toFixed(2)} 44 228)`);
 
   // マイクが有効な間は赤ランプが点灯する
   const live = engine.micActive && h > 0.02;
   $('powerLed').setAttribute('fill', live ? '#ff2d1a' : engine.micActive ? '#5a1a14' : '#6b6b6b');
   $('micLampGlow').setAttribute('opacity', live ? '0.32' : '0');
 
+  // 実機は「選択中のものまで上から全部点灯」する。3 つめを選んでいれば上 3 つが点く。
   [...$('ledFx').children].forEach((c, i) => {
-    c.setAttribute('fill', state.activeSlot === i ? '#e05526' : '#3a3a3a');
+    c.setAttribute('fill', i <= state.activeSlot ? '#e05526' : '#3a3a3a');
   });
   [...$('ledSample').children].forEach((c, i) => {
-    c.setAttribute('fill', state.sampleSlot === i ? '#e5e6e6' : '#3a3a3a');
+    c.setAttribute('fill', i <= state.sampleSlot ? '#e5e6e6' : '#3a3a3a');
   });
 
   $('deviceState').textContent = state.activeSlot < 0
@@ -337,7 +340,12 @@ function renderRow(preset, eff, i) {
     if (missing.length) {
       const bar = el('div', 'rowflex');
       const s = el('select');
-      for (const m of missing) s.append(new Option(m, m));
+      for (const m of missing) {
+        const unv = UNVERIFIED_PARAMS[name]?.includes(m);
+        const o = new Option(unv ? `${m}（${t('param.unverified')}）` : m, m);
+        o.title = unv ? t('param.unverified_help') : (paramDesc(name, m, getLang()) ?? '');
+        s.append(o);
+      }
       const b = el('button', 'is-small', t('param.add'));
       b.onclick = () => { eff[s.value] = spec.params[s.value][2]; syncAudio(); render(); };
       bar.append(s, b);
@@ -366,9 +374,16 @@ function renderParam(preset, eff, rowIndex, param, range) {
     renderOutput();
   };
   const effName = String(eff.effect).toUpperCase();
-  wrap.append(
-    tip(el('span', 'param__name', param), `${effName} · ${param}`, paramDesc(effName, param, getLang())),
-    slider, val);
+  const nameCell = tip(el('span', 'param__name', param), `${effName} · ${param}`,
+    paramDesc(effName, param, getLang()));
+  if (UNVERIFIED_PARAMS[effName]?.includes(param)) {
+    // readme.pdf にしか載っていないパラメータであることを見て分かるようにする
+    const mark = tip(el('span', 'chip is-warn', t('param.unverified')),
+      t('param.unverified'), t('param.unverified_help'));
+    mark.style.marginLeft = '5px';
+    nameCell.append(mark);
+  }
+  wrap.append(nameCell, slider, val);
   if (modulated) liveValues.push({ rowIndex, param, node: val, slider });
   return wrap;
 }
@@ -416,7 +431,7 @@ function fixTrigger(preset) {
 
 function renderModulation(preset) {
   const box = el('div', 'stack');
-  box.append(el('div', 'chip is-light', t('mod.title')));
+  box.append(el('div', 'section-head', t('mod.title')));
 
   for (const kind of ['handle', 'shake', 'lfo']) {
     const on = !!preset[kind];
@@ -597,41 +612,105 @@ async function loadSampleFile(slot, file) {
 
 // ─────────────────────── テンプレート ───────────────────────
 
+const expandedTemplates = new Set();
+
 function renderTemplates() {
   const box = $('templates');
   box.replaceChildren();
+
   for (const tpl of TEMPLATES) {
-    const b = el('button', 'tpl');
-    b.append(el('b', null, tpl.name));
-    b.append(el('span', null, tpl.desc[getLang()] ?? tpl.desc.en));
-    b.onclick = () => {
-      if (state.slots.some(Boolean) && !confirm(t('disk.load_confirm'))) return;
-      loadConfigObject(structuredClone(tpl.config));
+    const presets = tpl.config.presets ?? [];
+    const item = el('div', 'tpl-item');
+    const open = expandedTemplates.has(tpl.id);
+
+    const head = el('button', 'tpl-item__head');
+    head.append(el('b', null, tpl.name));
+    head.append(el('span', null, tpl.desc[getLang()] ?? tpl.desc.en));
+    if (presets.length) head.append(el('span', 'caret', open ? '−' : '+'));
+    head.onclick = () => {
+      if (!presets.length) {   // EMPTY はプリセットを持たないので即適用
+        if (confirm(t('tpl.overwrite', { name: tpl.name }))) applyTemplate(tpl);
+        return;
+      }
+      if (open) expandedTemplates.delete(tpl.id); else expandedTemplates.add(tpl.id);
+      renderTemplates();
     };
-    box.appendChild(b);
+    item.append(head);
+
+    if (open && presets.length) {
+      const body = el('div', 'tpl-item__body');
+
+      // プリセットを 1 つずつ、今選んでいるスロットに入れられる
+      for (const preset of presets) {
+        const row = el('div', 'tpl-preset');
+        const label = el('span', 'tpl-preset__name', preset.name ?? `pos ${preset.pos}`);
+        tip(label, preset.name ?? '', preset.comment ?? '');
+        row.append(label);
+        row.append(el('span', 'tpl-preset__chain',
+          preset.list.map((e) => e.effect).filter((e) => e !== 'SAMPLE').join('→')));
+        const use = el('button', 'is-small',
+          t('tpl.apply_to', { btn: buttonPosition(state.selected) }));
+        use.onclick = () => applyPreset(preset, state.selected);
+        row.append(use);
+        body.append(row);
+      }
+
+      const all = el('div', 'danger-bar');
+      const allBtn = el('button', 'is-small', t('tpl.apply_all'));
+      allBtn.onclick = () => {
+        if (confirm(t('tpl.overwrite', { name: tpl.name }))) applyTemplate(tpl);
+      };
+      all.append(allBtn);
+      body.append(all);
+      item.append(body);
+    }
+    box.appendChild(item);
   }
 
+  renderTePacks();
+}
+
+/** テンプレートの 1 プリセットだけを指定スロットに入れる */
+function applyPreset(preset, pos) {
+  if (state.slots[pos] && !confirm(
+    t('tpl.slot_overwrite', { btn: buttonPosition(pos), preset: preset.name ?? '' }))) return;
+  const { pos: _ignored, ...rest } = structuredClone(preset);
+  state.slots[pos] = rest;
+  state.selected = pos;
+  state.activeSlot = pos;
+  syncAudio();
+  render();
+}
+
+function applyTemplate(tpl) {
+  loadConfigObject(structuredClone(tpl.config));
+}
+
+function renderTePacks() {
   // TE 公式パックは再配布できないので、ダウンロードしたファイルを読み込む導線にする
   const te = $('tePacks');
   te.replaceChildren();
+  const ja = getLang() === 'ja';
+
   const open = el('button', 'tpl');
   open.append(el('b', null, 'open pack'));
-  open.append(el('span', null, getLang() === 'ja'
+  open.append(el('span', null, ja
     ? 'ダウンロードした .zip か config.json を読み込む'
     : 'load a downloaded .zip or config.json'));
   open.onclick = () => $('filePack').click();
-  const link = el('a');
+
+  const link = el('a', 'tpl');
   link.href = 'https://teenage.engineering/downloads/ep-2350/sound-packs';
-  link.target = '_blank'; link.rel = 'noopener';
-  link.className = 'tpl';
+  link.target = '_blank';
+  link.rel = 'noopener';
   link.append(el('b', null, 'download ↗'));
-  link.append(el('span', null, getLang() === 'ja'
+  link.append(el('span', null, ja
     ? 'TE の配布ページを開く（broken radio / mysterious / dub）'
     : "open TE's download page (broken radio / mysterious / dub)"));
-  te.append(open, link);
 
-  $('teHint').textContent = getLang() === 'ja'
-    ? 'TE 公式パックは teenage engineering の著作物で再配布が禁止されているため同梱していません。上のリンクから落として読み込んでください。'
+  te.append(open, link);
+  $('teHint').textContent = ja
+    ? 'TE 公式パックは teenage engineering の著作物で再配布が禁止されているため同梱していません。上のリンクから落として読み込んでください。読み込んだあとは各プリセットを 1 つずつスロットに入れられます。'
     : "The official TE packs are teenage engineering's material and cannot be redistributed, so they are not bundled. Download them above and load the file.";
 }
 
@@ -843,29 +922,6 @@ function initScope() {
   draw();
 }
 
-// ─────────────────────────── ヘルプ ───────────────────────────
-
-function initHelp() {
-  let on = false;
-  const marks = [['#btnFx', 'FX MODE'], ['#btnSampleSel', 'SAMPLE SEL.'], ['#btnTrig', 'SAMPLE TRIG']];
-  $('btnHelp').onclick = () => {
-    on = !on;
-    $('btnHelp').classList.toggle('is-on', on);
-    document.querySelectorAll('.callout').forEach((n) => n.remove());
-    if (!on) return;
-    const host = $('device').closest('.panel__body');
-    host.style.position = 'relative';
-    for (const [sel, text] of marks) {
-      const tr = document.querySelector(sel).getBoundingClientRect();
-      const h = host.getBoundingClientRect();
-      const c = el('div', 'callout to-left', text);
-      c.style.top = `${tr.top - h.top + tr.height / 2 - 10}px`;
-      c.style.left = `${tr.right - h.left + 16}px`;
-      host.appendChild(c);
-    }
-  };
-}
-
 // ─────────────────────────── モードと言語 ───────────────────────────
 
 function setMode(mode) {
@@ -902,6 +958,8 @@ function applyStaticText() {
   $('btnConnect').textContent = disk.connected ? t('disk.change') : t('disk.connect');
   $('diskName').textContent = disk.name ?? '';
   if (!disk.connected) $('diskChip').textContent = t('chip.disk.none');
+  $('footerUnofficial').textContent = t('footer.unofficial');
+  $('footerSimulation').textContent = t('footer.simulation');
   $('diskHint').innerHTML = diskSupported() ? t('disk.hint') : t('disk.hint_unsupported');
   $('diskHint').classList.toggle('hidden', disk.connected);
   paintMicState();
@@ -922,7 +980,6 @@ function init() {
   initTooltips();
   initDevice();
   initScope();
-  initHelp();
   tickLiveValues();
 
   const langSel = $('langSelect');
@@ -952,6 +1009,7 @@ function init() {
   };
   $('btnToggleJson').onclick = () => {
     const hidden = $('jsonBody').classList.toggle('hidden');
+    $('jsonPanel').classList.toggle('is-collapsed', hidden);
     $('btnToggleJson').textContent = hidden ? t('json.expand') : t('json.collapse');
   };
 
@@ -964,8 +1022,20 @@ function init() {
     e.target.value = '';
     if (!f) return;
     try {
-      loadConfigObject(JSON.parse(await readPackFile(f)));
+      const cfg = JSON.parse(await readPackFile(f));
+      // 読み込んだパックはテンプレート一覧に足して、1 つずつ選べるようにする
+      const id = `loaded:${f.name}`;
+      const idx = TEMPLATES.findIndex((x) => x.id === id);
+      const entry = {
+        id,
+        name: cfg.name || f.name.replace(/\.(zip|json)$/i, ''),
+        desc: { en: `loaded from ${f.name}`, ja: `${f.name} から読み込み` },
+        config: cfg,
+      };
+      if (idx >= 0) TEMPLATES[idx] = entry; else TEMPLATES.push(entry);
+      expandedTemplates.add(id);
       setMode('fx');
+      render();
     } catch (err) {
       alert(`${f.name}: ${err.message}`);
     }

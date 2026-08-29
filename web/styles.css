@@ -285,25 +285,6 @@ select, input[type=text], input[type=number] {
   mix-blend-mode: difference; color: var(--white);
 }
 
-/* ── ヘルプのふきだし（ep sample tool の矢印ラベル） ───────── */
-
-.callout {
-  position: absolute; z-index: 20;
-  background: var(--grey); color: var(--white);
-  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  padding: 4px 9px;
-  pointer-events: none;
-  white-space: nowrap;
-  box-shadow: 2px 2px 0 var(--shadow);
-}
-.callout::after {
-  content: ''; position: absolute; top: 0; bottom: 0; width: 9px;
-  background: var(--grey);
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-}
-.callout.to-right::after { right: -9px; }
-.callout.to-left::after  { left: -9px; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
-
 .hidden { display: none !important; }
 
 .hint { font-size: 10px; line-height: 1.6; color: var(--ink-soft); }
@@ -444,3 +425,53 @@ button.is-danger:hover { background: #f3d9d2; }
   text-transform: uppercase;
   margin-bottom: 3px;
 }
+
+
+/* 折りたたんだパネルではネジ装飾を出さない（本体が無いのに飛び出て見えるため） */
+.panel.is-collapsed::before,
+.panel.is-collapsed::after,
+.panel.is-collapsed > .screw-b::before,
+.panel.is-collapsed > .screw-b::after { display: none; }
+
+/* セクション見出し。区切りとして効くように、周りの要素より大きくする */
+.section-head {
+  display: flex; align-items: center; gap: 9px;
+  margin: 12px 0 2px;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink);
+}
+.section-head::after { content: ''; flex: 1; height: 2px; background: var(--ink); opacity: .18; }
+
+/* テンプレート: 展開してプリセットを 1 つずつ選べるようにする */
+.tpl-item { border: 1px solid var(--ink); box-shadow: 2px 2px 0 var(--shadow); background: var(--panel-3); }
+.tpl-item__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 9px; cursor: pointer; width: 100%;
+  background: none; border: 0; box-shadow: none; text-align: left;
+  font-family: var(--ui); text-transform: none; letter-spacing: 0; font-weight: 400;
+}
+.tpl-item__head:hover { background: var(--white); }
+.tpl-item__head b { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; flex: none; }
+.tpl-item__head span { font-size: 10px; color: var(--ink-soft); line-height: 1.4; flex: 1; }
+.tpl-item__head .caret { font-family: var(--mono); font-size: 10px; color: var(--grey); flex: none; }
+.tpl-item__body { border-top: 1px solid var(--panel-edge); padding: 6px 9px 8px; display: flex; flex-direction: column; gap: 4px; }
+.tpl-preset { display: flex; align-items: center; gap: 7px; }
+.tpl-preset__name { flex: 1; font-size: 10px; font-weight: 700; letter-spacing: .05em; }
+.tpl-preset__chain { font-family: var(--mono); font-size: 9px; color: var(--grey); }
+
+/* 未検証パラメータのマーク */
+.chip.is-warn { background: #8a6d1a; }
+
+/* フッター */
+.colophon {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,5,.18);
+  font-size: 10px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.colophon p { margin: 0 0 2px; }
+.colophon a { color: var(--ink-soft); }
