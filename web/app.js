@@ -260,28 +260,10 @@ function renderEditor() {
   p.list.forEach((eff, i) => chain.appendChild(renderRow(p, eff, i)));
   body.append(chain);
 
-  // 追加系はまとめて左に
   const addBar = el('div', 'rowflex');
-  const sel = el('select');
-  for (const name of Object.keys(EFFECTS)) {
-    const o = new Option(name, name);
-    o.title = effectDesc(name, getLang()) ?? '';    // ネイティブの title は select の中でも効く
-    sel.append(o);
-  }
-  const syncSelTip = () => tip(sel, sel.value, effectDesc(sel.value, getLang()));
-  sel.onchange = syncSelTip;
-  syncSelTip();
   const addBtn = el('button', 'is-small', t('editor.add_effect'));
-  addBtn.onclick = () => {
-    const name = sel.value;
-    const insertAt = p.list.findIndex((e) => e.effect === 'SAMPLE');
-    const item = { effect: name, ...defaultParams(name) };
-    if (name === 'SAMPLE') p.list.push({ effect: 'SAMPLE' });
-    else if (insertAt >= 0) p.list.splice(insertAt, 0, item);
-    else p.list.push(item);
-    fixTrigger(p); syncAudio(); render();
-  };
-  addBar.append(sel, addBtn);
+  addBtn.onclick = () => openEffectPicker(p);
+  addBar.append(addBtn);
   body.append(addBar);
 
   body.append(renderModulation(p));
@@ -295,6 +277,72 @@ function renderEditor() {
   };
   dangerBar.append(del);
   body.append(dangerBar);
+}
+
+/** チェーンにエフェクトを足す（SAMPLE の前に入れる） */
+function addEffect(preset, name) {
+  const insertAt = preset.list.findIndex((e) => String(e.effect).toUpperCase() === 'SAMPLE');
+  if (name === 'SAMPLE') preset.list.push({ effect: 'SAMPLE' });
+  else {
+    const item = { effect: name, ...defaultParams(name) };
+    if (insertAt >= 0) preset.list.splice(insertAt, 0, item);
+    else preset.list.push(item);
+  }
+  fixTrigger(preset);
+  syncAudio();
+  render();
+}
+
+/**
+ * エフェクト選択ピッカー。
+ * ドロップダウンだと名前しか見えず、どれが何なのか分からないので、
+ * 名前・説明・パラメータ一覧を並べて選べるようにしている。
+ */
+function openEffectPicker(preset) {
+  const back = el('div', 'backdrop');
+  const close = () => {
+    back.remove();
+    document.removeEventListener('keydown', onKey);
+  };
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  back.onclick = (e) => { if (e.target === back) close(); };
+
+  const panel = el('div', 'picker');
+  const bar = el('div', 'panel__bar');
+  bar.append(el('span', null, t('effect.picker_title')));
+  const spacer = el('span', 'spacer');
+  const closeBtn = el('button', 'bar-btn', t('effect.close'));
+  closeBtn.onclick = close;
+  bar.append(spacer, closeBtn);
+
+  const body = el('div', 'picker__body');
+  body.append(el('p', 'hint picker__hint', t('effect.picker_hint')));
+
+  const list = el('div', 'picker__list');
+  for (const [name, spec] of Object.entries(EFFECTS)) {
+    const row = el('button', 'fx-pick');
+
+    const nameCell = el('div', 'fx-pick__name');
+    nameCell.append(el('span', null, name));
+    if (spec.once) nameCell.append(el('span', 'chip is-grey', t('row.once')));
+
+    const descCell = el('div', 'fx-pick__desc', effectDesc(name, getLang()) ?? '');
+    const params = Object.keys(spec.params);
+    if (params.length) {
+      descCell.append(el('span', 'fx-pick__params', params.join(' · ')));
+    }
+
+    row.append(nameCell, descCell);
+    row.onclick = () => { addEffect(preset, name); close(); };
+    list.append(row);
+  }
+  body.append(list);
+
+  panel.append(bar, body);
+  back.append(panel);
+  document.body.append(back);
+  panel.querySelector('.fx-pick')?.focus();
 }
 
 function labelled(label, input) {

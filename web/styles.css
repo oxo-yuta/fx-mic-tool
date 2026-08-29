@@ -475,3 +475,51 @@ button.is-danger:hover { background: #f3d9d2; }
 }
 .colophon p { margin: 0 0 2px; }
 .colophon a { color: var(--ink-soft); }
+
+
+/* ── エフェクト選択ピッカー ───────────────────────────── */
+
+.backdrop {
+  position: fixed; inset: 0; z-index: 80;
+  background: rgba(0, 0, 5, .42);
+  display: grid; place-items: center;
+  padding: 20px;
+}
+.picker {
+  background: var(--panel);
+  border: 1px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--shadow);
+  width: min(560px, 100%);
+  max-height: min(78vh, 720px);
+  display: flex; flex-direction: column;
+}
+.picker__body { padding: 10px 12px 12px; overflow: auto; }
+.picker__hint { margin: 0 0 9px; }
+.picker__list { display: flex; flex-direction: column; gap: 5px; }
+
+.fx-pick {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  align-items: start;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  background: var(--panel-3);
+  border: 1px solid var(--ink);
+  box-shadow: 2px 2px 0 rgba(0, 0, 5, .18);
+  text-transform: none; letter-spacing: 0; font-weight: 400;
+  font-family: var(--ui); font-size: 12px; color: var(--ink);
+  cursor: pointer;
+}
+.fx-pick:hover { background: var(--white); }
+.fx-pick:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 rgba(0, 0, 5, .18); }
+.fx-pick__name {
+  display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+}
+.fx-pick__desc { font-size: 10px; line-height: 1.55; color: var(--ink-soft); }
+.fx-pick__params {
+  display: block; margin-top: 3px;
+  font-family: var(--mono); font-size: 9px; color: var(--grey);
+}
