@@ -72,6 +72,15 @@ UI 文言を足すときは `web/i18n.js` の**全 7 言語**に同じキーを�
 **プレビューは近似であって実機のエミュレータではない。** 内蔵プリセットは再現できず、
 HARMONY / SSB / REVERB / DIST は近似、BUS は未実装。**最終確認は必ず実機で行う。**
 
+## 公開
+
+Web エディタは **https://oxo-yuta.github.io/fx-mic-tool/** で公開している。
+`web/` を変更してコミットしたら `tools/deploy-pages.sh` で再デプロイする
+（`web/` の中身をルートに持つ `gh-pages` ブランチを作り直して push する）。
+
+**公開リポジトリなので、TE の著作物をコミットしないこと。** `factory/` と `vendor/` は
+gitignore 済み。`web/templates.js` のテンプレートも自前で書き起こしたオリジナルであること。
+
 ## よく使うコマンド
 
 ```bash

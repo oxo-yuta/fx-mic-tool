@@ -23,8 +23,11 @@ python3 -m http.server 8765 --directory web
 
 | 置き先 | 手順 |
 | --- | --- |
-| GitHub Pages | `web/` を Pages の公開ディレクトリに置く（`/<repo>/` 配下でもそのまま動く） |
+| GitHub Pages（公開中） | `tools/deploy-pages.sh`。`web/` の中身をルートに持つ `gh-pages` ブランチを作って push する<br>→ **https://oxo-yuta.github.io/fx-mic-tool/** |
 | 既存 LP のサブディレクトリ | `web/` を `/fx-mic/` などにコピーするだけ |
+
+> Pages のブランチ公開はルートか `/docs` しか選べないため、`web/` を直接指定することはできない。
+> そのため専用の `gh-pages` ブランチを用意している。
 
 依存している外部リソースは Google Fonts（Space Grotesk / Space Mono）のみ。
 オフラインで使いたい場合は `index.html` の `<link>` を外せばフォールバックのシステムフォントで動く。

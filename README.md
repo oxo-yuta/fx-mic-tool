@@ -27,6 +27,22 @@ python3 -m http.server 8765 --directory web   # → http://127.0.0.1:8765/
 ビルド不要の静的ファイルのみなので、GitHub Pages や既存サイトのサブディレクトリにそのまま置ける。
 詳細と既知の制約は [`web/README.md`](web/README.md)。
 
+## 公開先
+
+Web エディタは GitHub Pages で公開している。
+
+**https://oxo-yuta.github.io/fx-mic-tool/**
+
+`web/` を更新したらコミットしてから再デプロイする:
+
+```bash
+tools/deploy-pages.sh        # web/ の中身を gh-pages ブランチのルートに展開して push
+tools/deploy-pages.sh -n     # ドライラン
+```
+
+GitHub Pages のブランチ公開はルートか `/docs` しか選べず `web/` を直接指定できないため、
+`web/` の中身をルートに持つ `gh-pages` ブランチを用意している。
+
 ## ドキュメント
 
 [`docs/`](docs/README.md) — デバイス仕様、config.json リファレンス、サンプル作成、作業手順、TE 公式パックの分析。
